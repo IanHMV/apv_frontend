@@ -1,9 +1,7 @@
-import React from 'react'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Alerta, { AlertaProps } from './Alerta'
 import usePacientes from '../hooks/usePacientes'
-import { useEffect } from 'react';
-import { setId } from '@material-tailwind/react/components/Tabs/TabsContext';
+
 
 const Formulario = () => {
 
@@ -12,9 +10,12 @@ const Formulario = () => {
     const [email, setEmail] = useState('');
     const [fechaAlta, setFechaAlta] = useState('');
     const [sintomas, setSintomas] = useState('');
-    const [id, setId] = useState<string | null>(null);
+    const [_id, setId] = useState<string | null>(null);
 
-    const [alerta, setAlerta] = useState<AlertaProps>({msg: ''});
+
+    
+    
+    const [alerta, setAlerta] = useState<AlertaProps>({ msg: '' });
 
     const { guardarPaciente, paciente } = usePacientes();
     
@@ -26,11 +27,19 @@ const Formulario = () => {
             return
         }
 
-        setAlerta({});
+        setAlerta({ msg: '' });
 
-        guardarPaciente({nombre, propietario, email, fechaAlta, sintomas, id});
+        guardarPaciente({
+            nombre,
+            propietario,
+            email,
+            fechaAlta,
+            sintomas,
+            _id: _id ?? undefined,
+            });
 
-        setAlerta({msg: id ? 'Guardado Correctamente' : 'Agregado Correctamente', error: false});
+
+        setAlerta({msg: _id ? 'Guardado Correctamente' : 'Agregado Correctamente', error: false});
 
         setNombre('');
         setPropietario('');
@@ -42,16 +51,15 @@ const Formulario = () => {
     }
 
     useEffect(() => {
-        if(paciente?.nombre){
-            setNombre(paciente.nombre);
-            setPropietario(paciente.propietario);
-            setEmail(paciente.email);
-            setFechaAlta(paciente.fechaAlta);
-            setSintomas(paciente.sintomas);
-            setId(paciente._id);
-        }
+    if (paciente?._id) {
+        setNombre(paciente.nombre ?? '');
+        setPropietario(paciente.propietario ?? '');
+        setEmail(paciente.email ?? '');
+        setFechaAlta(paciente.fechaAlta ?? '');
+        setSintomas(paciente.sintomas ?? '');
+        setId(paciente._id ?? null);
     }
-    , [paciente])
+    }, [paciente]);
 
 
     const { msg } = alerta;
@@ -130,7 +138,7 @@ const Formulario = () => {
             </div>
 
             <input type="submit" className='bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md cursor-pointer transition-colors' 
-            value={id ? 'Guardar Cambios' : 'Agregar Paciente'}
+            value={_id ? 'Guardar Cambios' : 'Agregar Paciente'}
             />
 
         </form>

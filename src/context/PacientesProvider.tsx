@@ -4,11 +4,29 @@ import useAuth from "../hooks/useAuth";
 
 import React from "react";
 
-const PacientesContext = createContext();
+interface Paciente {
+  _id?: string;
+  nombre?: string;
+  propietario?: string;
+  email?: string;
+  fechaAlta?: string;
+  sintomas?: string;
+}
+
+interface PacientesContextType {
+  pacientes: Paciente[];
+  paciente: Paciente;
+  guardarPaciente: (paciente: Paciente) => Promise<void>;
+  setEdicion: (paciente: Paciente) => void;
+  eliminarPaciente: (id: string) => Promise<void>;
+}
+
+const PacientesContext = createContext<PacientesContextType | null>(null);
+
 
 export const PacientesProvider = ({ children }: { children: ReactNode }) => {
-  const [pacientes, setPacientes] = useState([]);
-  const [paciente, setPaciente] = useState({});
+  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+  const [paciente, setPaciente] = useState<Paciente>({});
   const {auth} = useAuth();
 
   useEffect(() => {
@@ -33,7 +51,7 @@ export const PacientesProvider = ({ children }: { children: ReactNode }) => {
     obtenerPacientes();
   }, [auth]);
 
-  const guardarPaciente = async (paciente: Object) => {
+  const guardarPaciente = async (paciente: Paciente) => {
     const token = localStorage.getItem("token");
     const config = {
       headers: {
@@ -43,10 +61,10 @@ export const PacientesProvider = ({ children }: { children: ReactNode }) => {
     };
 
     //Si el paciente tiene un id, es una edicion
-    if (paciente.id) {
+    if (paciente._id) {
       try {
         const { data } = await clienteAxios.put(
-          `/pacientes/${paciente.id}`,
+          `/pacientes/${paciente._id}`,
           paciente,
           config
         );

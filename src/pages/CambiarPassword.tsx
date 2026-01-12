@@ -9,9 +9,11 @@ interface PasswordState {
   pwd_nuevo: string;
 }
 
+
+
 const CambiarPassword = () => {
 
-  const {guardarPassword} = useAuth();
+  const { guardarPassword } = useAuth();
 
   const [alerta, setAlerta] = useState<AlertaProps>({ msg: "" });
   const [password, setPassword] = useState<PasswordState>({
@@ -19,8 +21,8 @@ const CambiarPassword = () => {
     pwd_nuevo: "",
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
     if (Object.values(password).some((campo) => campo === "")) {
       setAlerta({
@@ -31,17 +33,20 @@ const CambiarPassword = () => {
     }
 
     if (password.pwd_nuevo.length < 6) {
-      setAlerta({
-        msg: "El password debe ser minimo de 6 caracteres",
-        error: true,
-      });
-    }
+  setAlerta({
+    msg: "El password debe ser minimo de 6 caracteres",
+    error: true,
+  });
+  return;
+}
 
-    setAlerta({});
+    setAlerta({ msg: "" });
 
     const respuesta = await guardarPassword(password);
 
+  if (respuesta) {
     setAlerta(respuesta);
+  }
   };
 
   const { msg } = alerta;

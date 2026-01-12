@@ -5,6 +5,8 @@ interface AuthUser {
   _id?: string;
   nombre?: string;
   email?: string;
+  web?: string;
+  telefono?: string;
 }
 
 export interface AuthContextType {
@@ -12,6 +14,19 @@ export interface AuthContextType {
   setAuth: React.Dispatch<React.SetStateAction<AuthUser>>;
   cargando: boolean;
   cerrarSesion: () => void;
+  actualizarPerfil: (datos: PerfilDatos) => Promise<{ msg: string; error?: boolean } | undefined>;
+  guardarPassword: (datos: PasswordDatos) => Promise<{ msg: string; error?: boolean } | undefined>;
+}
+
+interface PerfilDatos {
+  _id?: string;
+  nombre?: string;
+  email?: string;
+}
+
+interface PasswordDatos {
+  pwd_actual: string;
+  pwd_nuevo: string;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -54,7 +69,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAuth({});
   };
 
-  const actualizarPerfil = async (datos) => {
+const actualizarPerfil = async (datos: PerfilDatos) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -84,7 +99,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const guardarPassword = async (datos) => {
+const guardarPassword = async (datos: PasswordDatos) => {
+
     const token = localStorage.getItem("token");
 
     if (!token) {
