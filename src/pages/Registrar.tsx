@@ -30,24 +30,26 @@ const Registrar = () => {
       return
     }
 
-    // Crear el usuario en la API
-    try {
-      const { data } = await clienteAxios.post(`/veterinarios`, {nombre, email, password})
-      
-      // 👇 Console.log de la respuesta exitosa
-      console.log('Respuesta del servidor:', data);
-      console.log('Mensaje:', data.msg);
-      
-      setAlerta({msg: "Creado correctamente, revisa tu email", error: false})
+    console.log("The 'Register' function has been disabled to prevent possible spam registrations. / La funcion de Registrar ha sido deshabilitada para evitar posibles registros basura.")
 
-    } catch (error: any) {
-      // 👇 Console.log del error
-      console.error('Error en el registro:', error);
-      console.error('Respuesta del servidor:', error.response?.data);
-      console.error('Mensaje de error:', error.response?.data?.msg);
+    // Crear el usuario en la API
+    // try {
+    //   const { data } = await clienteAxios.post(`/veterinarios`, {nombre, email, password})
       
-      setAlerta({msg: error.response.data.msg, error: true})
-    }
+    //   // 👇 Console.log de la respuesta exitosa
+    //   console.log('Respuesta del servidor:', data);
+    //   console.log('Mensaje:', data.msg);
+      
+    //   setAlerta({msg: "Creado correctamente, revisa tu email", error: false})
+
+    // } catch (error: any) {
+    //   // 👇 Console.log del error
+    //   console.error('Error en el registro:', error);
+    //   console.error('Respuesta del servidor:', error.response?.data);
+    //   console.error('Mensaje de error:', error.response?.data?.msg);
+      
+    //   setAlerta({msg: error.response.data.msg, error: true})
+    // }
 
   }
 
