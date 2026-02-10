@@ -31,7 +31,7 @@ const Registrar = () => {
     }
 
     console.log("The 'Register' function has been disabled to prevent possible spam registrations. / La funcion de Registrar ha sido deshabilitada para evitar posibles registros basura.")
-
+    setAlerta({ msg: "" });
     // Crear el usuario en la API
     // try {
     //   const { data } = await clienteAxios.post(`/veterinarios`, {nombre, email, password})
